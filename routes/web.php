@@ -15,4 +15,5 @@ Route::get('/', function () {
     return view('Booking-tickets');
 });
 
+//Route for the Ticket
 Route::post('/booking','TicketsController@store');

@@ -12,6 +12,7 @@ class TicketTableSeeder extends Seeder
      */
     public function run()
     {
+        //insert tickets available number in database
         DB::table('tickets')->insert
         ([
             'student' => 200,

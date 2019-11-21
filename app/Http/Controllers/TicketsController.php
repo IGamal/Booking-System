@@ -14,12 +14,15 @@ class TicketsController extends Controller
     {
         $ticket = Ticket::FindorFail(1);
 
-        if(DB::select('select * from booking_records where email = "'. $request["email"] . '" && ticket_type = "' . $request["ticket_type"] .'"' ))
+        //check if the email address already used to book the same ticket
+        if(BookingRecord::where("email",$request["email"])->where("ticket_type",$request["ticket_type"])->count())
         {
+            //add error message to the user
             $errors['email'] = 'This email address already used to book a '. $request["ticket_type"] . ' ticket';
         }
         else
         {
+            //check if there is available tickets
             if($request['ticket_type'] == 'student' && $ticket->student <= 0 )
             {
                 Session()->flash('student_ticket', 'Sorry student tickets sold out');
@@ -30,14 +33,17 @@ class TicketsController extends Controller
             }
             else
             {
+                //store booking information in the database
                 BookingRecord::create($request->all());
 
+                //check if the booked ticket is Student ticket and subtract 1 from the available tickets
                 if ($request['ticket_type'] == 'student')
                 {
                     $new_ticket = $ticket->student - 1;
 
                     $ticket->update(['student' => $new_ticket]);
                 }
+                //check if the booked ticket is Normal ticket and subtract 1 from the available tickets
                 elseif ($request['ticket_type'] == 'normal')
                 {
                     $new_ticket = $ticket->normal - 1;
@@ -45,12 +51,13 @@ class TicketsController extends Controller
                     $ticket->update(['normal' => $new_ticket]);
                 }
 
+                //if the ticket booked successfully send flash message to the user
                 Session()->flash('booked_successfully', 'You have booked your ticket successfully');
             }
 
             return redirect()->back();
         }
-
+        //return with errors message if any
         return redirect()->back()->withErrors($errors);
     }
 

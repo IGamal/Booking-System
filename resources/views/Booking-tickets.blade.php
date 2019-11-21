@@ -19,7 +19,7 @@
         <div class="container">
 
             <h1 class="flex-center">Book Ticket</h1>
-
+            //check if there any flash message and display them
             @if(Session()->has('booked_successfully')) <p class="flex-center btn btn-success"> {{session('booked_successfully')}}</p> @endif
             @if(Session()->has('student_ticket')) <p class="flex-center btn btn-danger"> {{session('student_ticket')}}</p> @endif
             @if(Session()->has('normal_ticket')) <p class="flex-center btn btn-danger"> {{session('normal_ticket')}}</p> @endif
@@ -28,18 +28,21 @@
 
                 <div class = "form-group">
                     {!! Form::label('name', 'Name', ['class' => 'control-label']) !!}
+                    //check if there any errors in name field
                     @if($errors->has('name')) <span class="error">{{$errors->first('name') }}</span> @endif
                     {!! Form::text('name', null, ['class' => 'form-control']) !!}
                 </div>
 
                 <div class = "form-group">
                     {!! Form::label('email', 'Email', ['class' => 'control-label']) !!}
+                    //check if there any errors in email field
                     @if($errors->has('email')) <span class="error">{{$errors->first('email') }}</span> @endif
                     {!! Form::email('email', null, ['class' => 'form-control']) !!}
                 </div>
 
                 <div class = "form-group">
                     {!! Form::label('phone', 'Phone', ['class' => 'control-label']) !!}
+                    //check if there any errors in phone field
                     @if($errors->has('phone')) <span class="error">{{$errors->first('phone') }}</span> @endif
                     {!! Form::text('phone', null, ['class' => 'form-control']) !!}
                 </div>
